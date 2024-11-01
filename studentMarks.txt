@@ -1,0 +1,6 @@
+Jake Hobbs, Coursework1: 19, Coursework2: 20, Coursework3: 19, Exam: 94
+Fred Smith, Coursework1: 15, Coursework2: 17, Coursework3: 14, Exam: 87
+Jo Huckleberry, Coursework1: 20, Coursework2: 14, Coursework3: 18, Exam: 50
+Leeann Kontos, Coursework1: 11, Coursework2: 12, Coursework3: 10, Exam: 65
+Joandra Terzi, Coursework1: 15, Coursework2: 15, Coursework3: 20, Exam: 97
+
