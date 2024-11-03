@@ -149,6 +149,7 @@ class StudentMarks:
             messagebox.showinfo("Records", "No student records available.")
             return
 
+        #this will show the student with the highest score in teh messagebox
         highest_record = max(self.student_records, key=lambda x: x['marks'])
         messagebox.showinfo("Highest Score", 
             f"Highest Score:\n"
@@ -167,6 +168,7 @@ class StudentMarks:
             messagebox.showinfo("Records", "No student records available.")
             return
 
+        #this will show the student with the lowest score in teh messagebox
         lowest_record = min(self.student_records, key=lambda x: x['marks'])
         messagebox.showinfo("Lowest Score", 
             f"Lowest Score:\n"
