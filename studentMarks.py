@@ -59,9 +59,9 @@ class StudentMarks:
                     cw3 = int(scores.split(', ')[2].split(': ')[1])
                     exam = int(scores.split(', ')[3].split(': ')[1])
 
-                    total_marks = cw1 + cw2 + cw3 + exam
-                    percentage = (total_marks / 160) * 100
-                    grade = self.calculate_grade(percentage)
+                    total_marks = cw1 + cw2 + cw3 + exam #get the total marks by adding all the scores
+                    percentage = (total_marks / 160) * 100 #get the percentage based on the total marks
+                    grade = self.calculate_grade(percentage) #get the grade based on the calculated grade
 
                     # append the record to the student_records list
                     self.student_records.append({
@@ -100,7 +100,7 @@ class StudentMarks:
 
     #a function that allows user to see each student individual record
     def view_individual_record(self):
-        self.list.delete(0, END)
+        self.list.delete(0, END) 
 
         name = self.search_name_entry.get().strip()
         found = False
@@ -127,14 +127,19 @@ class StudentMarks:
 
     #shows the equivalent of the percentage to grade
     def calculate_grade(self, percentage):
-        if percentage >= 70:
+        #the grade is 'A' if the percentage is greater or equal to 70
+        if percentage >= 70: 
             return 'A'
+        #the grade is 'B' if the percentage is greater or equal to 60
         elif percentage >= 60:
             return 'B'
+        #the grade is 'C' if the percentage is greater or equal to 50
         elif percentage >= 50:
             return 'C'
+        #the grade is 'D' if the percentage is greater or equal to 40
         elif percentage >= 40:
             return 'D'
+        #if the percentage is not met, the grade is 'F'
         else:
             return 'F'
 
