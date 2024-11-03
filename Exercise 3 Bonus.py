@@ -64,21 +64,23 @@ class StudentMarks:
         
     #this function gets a txt file to be used to display records
     def pre_records(self):
-        with open("studentMarks.txt", "r") as file:
-            for line in file:
+        with open("studentMarks.txt", "r") as file: #reads the studentmarks.txt file
+            for line in file: #reads each line #remove whitespace from the line
                 line = line.strip()
+                #if the line is not empty, 
                 if line:
                     try:
-                        name, scores = line.split(', ', 1)
-                        cw1 = int(scores.split(', ')[0].split(': ')[1])
-                        cw2 = int(scores.split(', ')[1].split(': ')[1])
-                        cw3 = int(scores.split(', ')[2].split(': ')[1])
-                        exam = int(scores.split(', ')[3].split(': ')[1])
+                        name, scores = line.split(', ', 1) #split line into name and scores using ','
+                        cw1 = int(scores.split(', ')[0].split(': ')[1]) #coursework 1
+                        cw2 = int(scores.split(', ')[1].split(': ')[1]) #coursework 2
+                        cw3 = int(scores.split(', ')[2].split(': ')[1]) #coursework 3
+                        exam = int(scores.split(', ')[3].split(': ')[1]) #exam score
 
-                        total_marks = cw1 + cw2 + cw3 + exam
-                        percentage = (total_marks / 160) * 100
-                        grade = self.calculate_grade(percentage)
+                        total_marks = cw1 + cw2 + cw3 + exam #get the total marks by adding all scores
+                        percentage = (total_marks / 160) * 100 #get the percentage based on total marks
+                        grade = self.calculate_grade(percentage) #get the grade based on the calculated percentage
 
+                        #append the student record using dictionary to the student_records list
                         self.student_records.append({
                             "name": name,
                             "cw1": cw1,
@@ -99,18 +101,24 @@ class StudentMarks:
             return
         
         try:
-            cw1 = int(simpledialog.askstring("Coursework 1", "Enter Coursework 1 mark(0-20):"))
+            #ask the user to enter coursework 1 mark
+            cw1 = int(simpledialog.askstring("Coursework 1", "Enter Coursework 1 mark(0-20):")) 
+            #ask the user to enter coursework 2 mark
             cw2 = int(simpledialog.askstring("Coursework 2", "Enter Coursework 2 mark(0-20):"))
+            #ask the user to enter coursework 3 mark
             cw3 = int(simpledialog.askstring("Coursework 3", "Enter Coursework 3 mark(0-20):"))
+            #ask the user to enter exam marks
             exam = int(simpledialog.askstring("Exam", "Enter exam mark (0-100): "))
 
+            #check if there is any mark less than 0
             if any(mark < 0 for mark in [cw1, cw2, cw3, exam]):
-                raise ValueError("Marks should be non-negative.")
+                raise ValueError("Marks should be non-negative.") #if any mark is negative, it raises a ValueError
            
-            total_marks = cw1 + cw2 + cw3 + exam
-            percentage = (total_marks / 160) * 100
-            grade = self.calculate_grade(percentage)
+            total_marks = cw1 + cw2 + cw3 + exam #get the total marks by adding all the scores
+            percentage = (total_marks / 160) * 100 #get the percentage based on total marks
+            grade = self.calculate_grade(percentage) #get the grade based on the calculated percentage
 
+            #new dictionary created
             new_record = {
                "name": name,
                "cw1": cw1,
@@ -123,15 +131,16 @@ class StudentMarks:
             } 
             self.student_records.append(new_record)
 
+            #create a messagebox for the student information added
             messagebox.showinfo("Student Record Added", 
-                        f"Name: {name}\n"
-                        f"Coursework1: {cw1}\n"
-                        f"Coursework2: {cw2}\n"
-                        f"Coursework3: {cw3}\n"
-                        f"Exam: {exam}\n"
-                        f"Total Marks: {total_marks}\n"
-                        f"Percentage: {percentage:.2f}%\n"
-                        f"Grade: {grade}")
+                        f"Name: {name}\n" #displays student name
+                        f"Coursework1: {cw1}\n" #displays score for coursework 1
+                        f"Coursework2: {cw2}\n" #displays score for coursework 2
+                        f"Coursework3: {cw3}\n" #displays score for coursework 3
+                        f"Exam: {exam}\n" #displays score for exam
+                        f"Total Marks: {total_marks}\n" #displays score for total marks
+                        f"Percentage: {percentage:.2f}%\n" #displays score for percentage
+                        f"Grade: {grade}") #displays student;s grade
 
             with open("studentMarks.txt", "a") as file:
                 file.write(f"{name}, Coursework1: {cw1}, Coursework2: {cw2}, Coursework3: {cw3}, Exam: {exam}\n")
@@ -145,49 +154,58 @@ class StudentMarks:
     #a function that allows user to delete their records
     def delete_record(self):
         delete_name = simpledialog.askstring("Delete Student's Record", "Enter student's name (delete): ")
-    
+
+        #if the delete_name variable is empty, exit the function
         if not delete_name:
             return 
 
         record_found = False
-        for record in self.student_records:
-            if record['name'].lower() == delete_name.lower(): 
+        for record in self.student_records: #loops through the student record list
+            if record['name'].lower() == delete_name.lower(): #check if the current name matches the name to be deleted
                 self.student_records.remove(record)
                 record_found = True
                 break
 
-        if record_found:
+        #sif there is record found, show a message that the student's record was deleted
+        if record_found: 
             messagebox.showinfo("Record Deleted", f"Record for {delete_name} has been deleted.")
+        #if no record was found, a message will appear saying no record was found
         else:
-            messagebox.showerror("Error", f"No record found for student: {delete_name}")
+            messagebox.showerror("Error", f"No record found for student: {delete_name}") 
 
         self.view_all_records()
         
     #a function that allows user to update their records
     def update_record(self):
         update_name = simpledialog.askstring("Update Student's Record", "Enter student's name (update): ")
-        
+
+        #if the update_name variable is empty, exit the function
         if not update_name:
-            return
+            return 
         
         record_found = False
-        for record in self.student_records: 
-            if record['name'].lower() == update_name.lower():
+        for record in self.student_records: #loop through the student record list
+            if record['name'].lower() == update_name.lower(): #check if the current name matches the name to be updated
                 record_found = True
                 
                 try:
+                    #tells the user to enter a new mark for coursework 1
                     cw1 = int(simpledialog.askstring("Coursework 1", "Enter new Coursework 1 mark (0-20):", initialvalue=record['cw1']))
+                    #tells the user to enter a new mark for coursework 2
                     cw2 = int(simpledialog.askstring("Coursework 2", "Enter new Coursework 2 mark (0-20):", initialvalue=record['cw2']))
+                    #tells the user to enter a new mark for coursework 3
                     cw3 = int(simpledialog.askstring("Coursework 3", "Enter new Coursework 3 mark (0-20):", initialvalue=record['cw3']))
+                    #tells the user to enter a new mark for exam
                     exam = int(simpledialog.askstring("Exam", "Enter new exam mark (0-100):", initialvalue=record['exam']))
 
-                    if any(mark < 0 for mark in [cw1, cw2, cw3, exam]):
-                       raise ValueError("Marks should be non-negative.")
+                    if any(mark < 0 for mark in [cw1, cw2, cw3, exam]): #checks if there are any marks less than 0
+                       raise ValueError("Marks should be non-negative.") #if there is any mark with a negative, it raises a ValueError
                    
-                    total_marks = cw1 + cw2 + cw3 + exam
-                    percentage = (total_marks / 160) * 100
-                    grade = self.calculate_grade(percentage)
+                    total_marks = cw1 + cw2 + cw3 + exam #get the total marks by adding all the scores
+                    percentage = (total_marks / 160) * 100 #get the percentage based on the total marks
+                    grade = self.calculate_grade(percentage) #get the grade based on the calculated percentage
 
+                    #update the student record with the new scores
                     record.update({
                       "cw1": cw1,
                       "cw2": cw2,
@@ -197,12 +215,15 @@ class StudentMarks:
                       "percentage": percentage,
                       "grade": grade
                   })
-                  
-                    messagebox.showerror("Invalid input", f"Record for {update_name} has been updated.")
+
+                    #shows that the input has been updated
+                    messagebox.showerror("Success!", f"Record for {update_name} has been updated.")
+                    #shows that there is no number entered
                 except (ValueError, TypeError):
                     messagebox.showerror("Invalid input", "Please enter number for marks.")
                 break
-            
+
+        #shows if there are any records found for a student you want to update
         if not record_found:
            messagebox.showerror("Error", f"No record found for this student: {update_name}")
             
@@ -217,14 +238,19 @@ class StudentMarks:
         
     #a function that shows the equivalent of each percentage to the grade
     def calculate_grade(self, percentage):
+        #the grade for the student is 'A' if the percentage is greater or equal to 70
         if percentage >=70:
             return 'A'     
+        #the grade is 'B' if the percentage is greater or equal to 60
         elif percentage >=60:
             return 'B'
+        #the grade is 'C' if the percentage is greater or equal to 50
         elif percentage >=50:
             return 'C'
+        #the grade is 'D' if the percentage is greater or equal to 40
         elif percentage >=40:
             return 'D'
+        #if none of the grades are met, the student fails or the grade is 'F'
         else:
             return 'F'
 
@@ -232,28 +258,30 @@ class StudentMarks:
     def view_all_records(self):
         self.list.delete(0, END)
 
+        #shows a message that says no records are available for the student
         if not self.student_records:
             messagebox.showinfo("Records", "No student records available.")
             return
 
         for record in self.student_records:
-            formatted_line = (f"Name: {record['name']}\n"
-                              f"Coursework1: {record['cw1']}\n"
-                              f"Coursework2: {record['cw2']}\n"
-                              f"Coursework3: {record['cw3']}\n"
-                              f"Exam: {record['exam']}\n"
-                              f"Total Marks: {record['marks']} / 160\n"
-                              f"Percentage: {record['percentage']:.2f}%\n"
-                              f"Grade: {record['grade']}\n")
-            self.list.insert(END, formatted_line)
-            self.list.insert(END, "")
+            formatted_line = (f"Name: {record['name']}\n" #display student name
+                              f"Coursework1: {record['cw1']}\n" #display score for coursework 1
+                              f"Coursework2: {record['cw2']}\n" #display score for coursework 2
+                              f"Coursework3: {record['cw3']}\n" #display score for coursework 3
+                              f"Exam: {record['exam']}\n"  #display exam score
+                              f"Total Marks: {record['marks']} / 160\n"  #display the total marks
+                              f"Percentage: {record['percentage']:.2f}%\n"  #display the percentage
+                              f"Grade: {record['grade']}\n")  #display the grade
+            
+            self.list.insert(END, formatted_line) #inserts the formatted information for the student into the listbox
+            self.list.insert(END, "") #inserts empty line after each record
             
             
     #this shows each individual student record
     def view_individual_record(self):
-        self.list.delete(0, END)
+        self.list.delete(0, END) #clear all items from the list 
 
-        name = self.search_name_entry.get().strip()
+        name = self.search_name_entry.get().strip() #get the text entered in the search entry field
         found = False
         
         for record in self.student_records:
@@ -270,6 +298,7 @@ class StudentMarks:
                 found = True
                 break
 
+        #shows the user that no record was found
         if not found:
             messagebox.showerror("Error!", f"No record was found for student: {name}")
     
@@ -279,6 +308,7 @@ class StudentMarks:
             messagebox.showinfo("Records", "No student records available.")
             return
 
+        #this will show the student with the highest score in the messagebox
         highest_record = max(self.student_records, key=lambda x: x['marks'])
         messagebox.showinfo("Highest Score", 
             f"Highest Score:\n"
@@ -297,6 +327,7 @@ class StudentMarks:
             messagebox.showinfo("Records", "No student records available.")
             return
 
+        #this will show the student with the lowest score in the messagebox
         lowest_record = min(self.student_records, key=lambda x: x['marks'])
         messagebox.showinfo("Lowest Score", 
             f"Lowest Score:\n"
